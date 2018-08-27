@@ -40,10 +40,10 @@ link_directories(${LZ4_LIBRARY_DIR})
 
 # Generate Protobuf code
 set(proioprotos
-    ${PROJECT_SOURCE_DIR}/proio/proio.proto
+    ${PROJECT_SOURCE_DIR}/proto/proio.proto
     )
 protobuf_generate_cpp(protosources protoheaders ${proioprotos})
-file(GLOB_RECURSE modelprotos ${PROJECT_SOURCE_DIR}/proio/model/*.proto)
+file(GLOB_RECURSE modelprotos ${PROJECT_SOURCE_DIR}/proto/model/*.proto)
 protobuf_generate_cpp(modelsources modelheaders ${modelprotos})
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
