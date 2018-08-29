@@ -1,4 +1,5 @@
 #include <fcntl.h>
+#include <functional>
 
 #include <google/protobuf/io/gzip_stream.h>
 #include <lz4frame.h>
@@ -90,6 +91,7 @@ void Writer::Flush() {
 }
 
 void Writer::Push(Event *event) {
+    // Add metadata that have changed
     for (auto keyValuePair : event->metadata)
         if (metadata[keyValuePair.first] != keyValuePair.second) {
             PushMetadata(keyValuePair.first, *keyValuePair.second);
@@ -98,6 +100,25 @@ void Writer::Push(Event *event) {
 
     event->FlushCache();
     proto::Event *proto = event->getProto();
+
+    // Add new protobuf FileDescriptors to the stream that are required to
+    // describe event data
+    std::set<const FileDescriptor *> newFDs;
+    std::function<void(const FileDescriptor *)> addFDsToSet;
+    addFDsToSet = [&](const FileDescriptor *fd) {
+        for (int i = 0; i < fd->dependency_count(); i++) addFDsToSet(fd->dependency(i));
+        if (writtenFDs.count(fd) == 0) {
+            newFDs.insert(fd);
+            this->writtenFDs.insert(fd);
+        }
+    };
+    for (auto keyValuePair : proto->type()) addFDsToSet(event->getDescriptor(keyValuePair.first)->file());
+    if (newFDs.size() > 0) Flush();
+    for (auto fd : newFDs) {
+        FileDescriptorProto fdProto;
+        fd->CopyTo(&fdProto);
+        fdProto.SerializeToString(header->add_filedescriptor());
+    }
 
     auto stream = new io::CodedOutputStream(bucket);
 #if GOOGLE_PROTOBUF_VERSION >= 3004000

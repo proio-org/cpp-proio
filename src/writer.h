@@ -7,6 +7,8 @@
 #include <string>
 #include <thread>
 
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/descriptor.pb.h>
 #include <google/protobuf/io/zero_copy_stream_impl.h>
 
 #include "event.h"
@@ -94,6 +96,7 @@ class Writer : public std::mutex {
     uint64_t bucketDumpThres;
     proto::BucketHeader *header;
     std::map<std::string, std::shared_ptr<std::string>> metadata;
+    std::set<const google::protobuf::FileDescriptor *> writtenFDs;
 
     void initBucket();
 
