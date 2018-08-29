@@ -10,6 +10,8 @@ using namespace google::protobuf;
 
 Event::Event() {
     eventProto = new proto::Event();
+    SetDescriptorPool();
+    UseGeneratedPool();
     dirtyTags = false;
 }
 
@@ -51,8 +53,15 @@ Message *Event::GetEntry(uint64_t id) {
     if (storeEntries.size() > 0) {
         entry = storeEntries.back();
         storeEntries.pop_back();
-    } else
-        entry = MessageFactory::generated_factory()->GetPrototype(desc)->New();
+    } else {
+        const Message *prototype = NULL;
+        if (useGenPool) prototype = MessageFactory::generated_factory()->GetPrototype(desc);
+        if (!prototype && messageFactory) prototype = messageFactory->GetPrototype(desc);
+        if (prototype)
+            entry = prototype->New();
+        else
+            throw unknownMessageTypeError;
+    }
     if (!entry->ParseFromString(entryProto.payload())) {
         entry->Clear();
         store[entry->GetDescriptor()].push_back(entry);
@@ -193,6 +202,12 @@ void Event::Clear() {
     dirtyTags = false;
 }
 
+void Event::SetDescriptorPool(const DescriptorPool *pool) {
+    FlushCache();
+    descriptorPool = pool;
+    if (pool) messageFactory.reset(new DynamicMessageFactory(pool));
+}
+
 Event &Event::operator=(const Event &event) {
     if (&event == this) return *this;
     *this->eventProto = *event.eventProto;
@@ -236,7 +251,11 @@ uint64_t Event::getTypeID(Message *entry) {
 const Descriptor *Event::getDescriptor(uint64_t typeID) {
     if (!descriptorCache.count(typeID)) {
         const std::string typeName = eventProto->type().at(typeID);
-        descriptorCache[typeID] = DescriptorPool::generated_pool()->FindMessageTypeByName(typeName);
+        descriptorCache[typeID] = NULL;
+        if (useGenPool)
+            descriptorCache[typeID] = DescriptorPool::generated_pool()->FindMessageTypeByName(typeName);
+        if (!descriptorCache[typeID] && descriptorPool)
+            descriptorCache[typeID] = descriptorPool->FindMessageTypeByName(typeName);
     }
     return descriptorCache[typeID];
 }

@@ -187,6 +187,50 @@ void pushGetInspect4(proio::Compression comp) {
     remove(filename);
 }
 
+void pushGetInspect5(proio::Compression comp) {
+    char filename[] = "pushgetinspect5XXXXXX";
+    auto writer = new proio::Writer(mkstemp(filename));
+    writer->SetCompression(comp);
+
+    std::vector<proio::Event *> eventsOut;
+
+    auto event = new proio::Event();
+    event->AddEntry(new eic::Particle(), "Particle");
+    event->AddEntry(new eic::Particle(), "Particle");
+    event->AddEntry(new eic::SimHit(), "Tracker");
+    event->AddEntry(new eic::SimHit(), "Tracker");
+    writer->Push(event);
+    eventsOut.push_back(event);
+
+    event = new proio::Event();
+    event->AddEntry(new lcio::SimTrackerHit(), "TrackerHits");
+    event->AddEntry(new lcio::SimTrackerHit(), "TrackerHits");
+    writer->Push(event);
+    eventsOut.push_back(event);
+
+    event = new proio::Event();
+    event->AddEntry(new lcio::SimTrackerHit(), "TrackerHits");
+    event->AddEntry(new lcio::SimTrackerHit(), "TrackerHits");
+    writer->Push(event);
+    eventsOut.push_back(event);
+
+    delete writer;
+
+    auto reader = new proio::Reader(filename);
+
+    for (int i = 0; i < eventsOut.size(); i++) {
+        event = reader->Next();
+        assert(event);
+        event->UseGeneratedPool(false);
+        assert(event->String().compare(eventsOut[i]->String()) == 0);
+        delete eventsOut[i];
+        delete event;
+    }
+
+    delete reader;
+    remove(filename);
+}
+
 void pushSkipGet1(proio::Compression comp) {
     char filename[] = "pushskipget1XXXXXX";
     auto writer = new proio::Writer(mkstemp(filename));
@@ -322,6 +366,10 @@ int main() {
     pushGetInspect4(proio::LZ4);
     pushGetInspect4(proio::UNCOMPRESSED);
     pushGetInspect4(proio::GZIP);
+
+    pushGetInspect5(proio::LZ4);
+    pushGetInspect5(proio::UNCOMPRESSED);
+    pushGetInspect5(proio::GZIP);
 
     pushSkipGet1(proio::LZ4);
     pushSkipGet1(proio::UNCOMPRESSED);

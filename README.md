@@ -1,7 +1,7 @@
 # proio for C++
 [![Build Status](https://travis-ci.org/proio-org/cpp-proio.svg?branch=master)](https://travis-ci.org/proio-org/cpp-proio)
 [![codecov](https://codecov.io/gh/proio-org/cpp-proio/branch/master/graph/badge.svg)](https://codecov.io/gh/proio-org/cpp-proio)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e53e7110bf854263afb2fbe5a2587040)](https://www.codacy.com/app/decibelcooper/cpp-proio?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=proio-org/cpp-proio&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ad338e9f8dad4cdbb54d664a742f3a81)](https://www.codacy.com/app/proio-org/cpp-proio?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=proio-org/cpp-proio&amp;utm_campaign=Badge_Grade)
 
 ## API
 The API documentation is generated using Doxygen, and can be found

@@ -129,6 +129,7 @@ void Reader::readFromBucket(Event *event) {
                 delete stream;
                 throw deserializationError;
             }
+            event->SetDescriptorPool(DescriptorPool());
             stream->PopLimit(eventLimit);
         } else if (!stream->Skip(protoSize)) {
             delete stream;
@@ -198,6 +199,13 @@ void Reader::readHeader() {
     // Set metadata for future events
     for (auto keyValuePair : bucketHeader->metadata())
         metadata[keyValuePair.first] = std::make_shared<std::string>(keyValuePair.second);
+
+    // Add descriptors to pool owned by reader
+    for (const std::string &fdString : bucketHeader->filedescriptor()) {
+        FileDescriptorProto fdProto;
+        fdProto.ParseFromString(fdString);
+        descriptorPool.BuildFile(fdProto);
+    }
 
     delete stream;
 }

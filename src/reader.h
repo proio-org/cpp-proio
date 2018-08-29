@@ -65,6 +65,12 @@ class Reader : public std::mutex {
      * seekable.
      */
     void SeekToStart();
+    /** DescriptorPool returns a pointer to a protobuf descriptor pool that has
+     * been built from information included in the stream or file.  This can be
+     * passed to Events in order to dynamically read entries of types that are
+     * not known at compile time.
+     */
+    const google::protobuf::DescriptorPool *DescriptorPool() { return &descriptorPool; }
 
    private:
     void initBucket();
@@ -84,6 +90,7 @@ class Reader : public std::mutex {
     LZ4F_dctx *dctxPtr;
     BucketInputStream *bucket;
     std::map<std::string, std::shared_ptr<std::string>> metadata;
+    google::protobuf::DescriptorPool descriptorPool;
 };
 
 const class FileOpenError : public std::exception {
