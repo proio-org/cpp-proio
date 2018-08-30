@@ -89,7 +89,7 @@ class Reader : public std::mutex {
     uint64_t bucketIndex;
     LZ4F_dctx *dctxPtr;
     BucketInputStream *bucket;
-    std::map<std::string, std::shared_ptr<std::string>> metadata;
+    std::map<std::string, std::shared_ptr<const std::string>> metadata;
     google::protobuf::DescriptorPool descriptorPool;
 };
 

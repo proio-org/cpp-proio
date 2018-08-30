@@ -70,7 +70,7 @@ class Writer : public std::mutex {
      * the stream.  If Events exist in the current bucket, the bucket is
      * flushed first.
      */
-    void PushMetadata(std::string name, std::string &data);
+    void PushMetadata(std::string name, const std::string &data);
     /** PushMetadata takes a string key and null-terminated const char array by
      * pointer and pushes it into the stream.  If Events exist in the current
      * bucket, the bucket is flushed first.
@@ -95,7 +95,7 @@ class Writer : public std::mutex {
     BucketOutputStream *compBucket;
     uint64_t bucketDumpThres;
     proto::BucketHeader *header;
-    std::map<std::string, std::shared_ptr<std::string>> metadata;
+    std::map<std::string, std::shared_ptr<const std::string>> metadata;
     std::set<const google::protobuf::FileDescriptor *> writtenFDs;
 
     void initBucket();

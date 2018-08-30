@@ -13,6 +13,8 @@ namespace proio {
  */
 class Event {
    public:
+    /** Default constructor
+     */
     Event();
     /** This constructor initializes the event from the protobuf wire format.
      */
@@ -66,10 +68,10 @@ class Event {
      */
     google::protobuf::Message *Free(const google::protobuf::Descriptor *desc);
     /** Metadata returns a mapping from a string key to a pointer to a string
-     * that contains the metadata, by reference.  These metadata are all the
-     * entries received on the stream up to this Event.
+     * that contains metadata associated with the Event by a Reader.  These
+     * metadata are all the entries received on the stream up to this Event.
      */
-    const std::map<std::string, std::shared_ptr<std::string>> &Metadata() { return metadata; }
+    std::map<std::string, std::shared_ptr<const std::string>> &Metadata() { return metadata; }
 
     /** String returns a human-readable string representing the event.
      */
@@ -121,7 +123,7 @@ class Event {
     std::map<std::string, uint64_t> revTypeLookup;
     std::map<uint64_t, google::protobuf::Message *> entryCache;
     std::map<uint64_t, const google::protobuf::Descriptor *> descriptorCache;
-    std::map<std::string, std::shared_ptr<std::string>> metadata;
+    std::map<std::string, std::shared_ptr<const std::string>> metadata;
     const google::protobuf::DescriptorPool *descriptorPool;
     std::unique_ptr<google::protobuf::DynamicMessageFactory> messageFactory;
     bool useGenPool;

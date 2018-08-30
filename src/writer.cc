@@ -134,7 +134,7 @@ void Writer::Push(Event *event) {
     if (bucket->ByteCount() > bucketDumpThres) Flush();
 }
 
-void Writer::PushMetadata(std::string name, std::string &data) {
+void Writer::PushMetadata(std::string name, const std::string &data) {
     Flush();
     (*header->mutable_metadata())[name] = data;
 }
