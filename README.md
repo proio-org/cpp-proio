@@ -26,8 +26,8 @@ make sure you have CMake installed.  Create a build directory (e.g.
 cpp-proio/build), and `cd` into it.  Then, run `cmake` on the directory with
 `CMakeLists.txt` (this directory).
 ```shell
-mkdir cpp-proio/build
-cd cpp-proio/build
+mkdir build
+cd build
 cmake ../
 make
 make test
