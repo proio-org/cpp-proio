@@ -3,6 +3,8 @@
 [![codecov](https://codecov.io/gh/proio-org/cpp-proio/branch/master/graph/badge.svg)](https://codecov.io/gh/proio-org/cpp-proio)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ad338e9f8dad4cdbb54d664a742f3a81)](https://www.codacy.com/app/proio-org/cpp-proio?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=proio-org/cpp-proio&amp;utm_campaign=Badge_Grade)
 
+Please see the [main proio repository](https://github.com/proio-org/proio) for general information on proio.
+
 ## API
 The API documentation is generated using Doxygen, and can be found
 [here](https://proio-org.github.io/cpp-proio-docs/).
