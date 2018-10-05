@@ -5,7 +5,7 @@
 #include <iostream>
 
 #include "event.h"
-#include "lcio.pb.h"
+#include "proio/model/lcio/lcio.pb.h"
 #include "reader.h"
 #include "writer.h"
 

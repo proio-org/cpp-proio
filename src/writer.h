@@ -11,8 +11,8 @@
 #include <google/protobuf/descriptor.pb.h>
 #include <google/protobuf/io/zero_copy_stream_impl.h>
 
+#include <proio/proto/proio.pb.h>
 #include "event.h"
-#include "proio.pb.h"
 
 namespace proio {
 typedef proto::BucketHeader_CompType Compression;

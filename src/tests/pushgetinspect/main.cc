@@ -4,9 +4,9 @@
 #include <stdio.h>
 #include <iostream>
 
-#include "eic.pb.h"
 #include "event.h"
-#include "lcio.pb.h"
+#include "proio/model/eic/eic.pb.h"
+#include "proio/model/lcio/lcio.pb.h"
 #include "reader.h"
 #include "writer.h"
 

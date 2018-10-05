@@ -21,6 +21,9 @@ endif()
 if(NOT Protobuf_LIBRARY_DIR)
     set(Protobuf_LIBRARY_DIR ${PROTOBUF_LIBRARY_DIR})
 endif()
+if(NOT Protobuf_PROTOC_EXECUTABLE)
+    set(Protobuf_PROTOC_EXECUTABLE ${PROTOBUF_PROTOC_EXECUTABLE})
+endif()
 include_directories(${Protobuf_INCLUDE_DIRS})
 get_filename_component(Protobuf_LIBRARY_DIR ${Protobuf_LIBRARY} DIRECTORY)
 link_directories(${Protobuf_LIBRARY_DIR})
@@ -39,12 +42,37 @@ get_filename_component(LZ4_LIBRARY_DIR ${LZ4_LIBRARY} DIRECTORY)
 link_directories(${LZ4_LIBRARY_DIR})
 
 # Generate Protobuf code
+function(protobuf_generate_cpp sources headers abs_proto_path rel_output_path)
+    set(${sources})
+    set(${headers})
+    foreach(proto ${ARGN})
+        get_filename_component(proto_dir ${proto} DIRECTORY)
+        get_filename_component(proto_base ${proto} NAME_WE)
+        file(RELATIVE_PATH proto_rel_dir ${abs_proto_path} ${proto_dir})
+        set(proto_new_dir ${CMAKE_CURRENT_BINARY_DIR}/${rel_output_path}/${proto_rel_dir})
+        set(source "${proto_new_dir}/${proto_base}.pb.cc")
+        list(APPEND ${sources} ${source})
+        set(header "${proto_new_dir}/${proto_base}.pb.h")
+        list(APPEND ${headers} ${header})
+        add_custom_command(
+            OUTPUT ${source} ${header}
+            COMMAND ${Protobuf_PROTOC_EXECUTABLE}
+            ARGS --cpp_out ${CMAKE_CURRENT_BINARY_DIR} --proto_path=${rel_output_path}=${abs_proto_path} ${proto}
+            DEPENDS ${proto}
+            COMMENT "Running C++ protobuf compiler on ${proto}"
+            )
+    endforeach()
+    set_source_files_properties(${${sources}} ${${headers}} PROPERTIES GENERATED TRUE)
+    set(${sources} ${${sources}} PARENT_SCOPE)
+    set(${headers} ${${headers}} PARENT_SCOPE)
+endfunction()
+
 set(proioprotos
     ${PROJECT_SOURCE_DIR}/proto/proio.proto
     )
-protobuf_generate_cpp(protosources protoheaders ${proioprotos})
+protobuf_generate_cpp(protosources protoheaders ${PROJECT_SOURCE_DIR}/proto proio/proto ${proioprotos})
 file(GLOB_RECURSE modelprotos ${PROJECT_SOURCE_DIR}/proto/model/*.proto)
-protobuf_generate_cpp(modelsources modelheaders ${modelprotos})
+protobuf_generate_cpp(modelsources modelheaders ${PROJECT_SOURCE_DIR}/proto/model proio/model ${modelprotos})
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 # Specify library code
@@ -78,14 +106,11 @@ install(TARGETS proio proio.pb
     EXPORT proioTargets
     DESTINATION lib
     )
-foreach(header ${protoheaders})
+foreach(header ${protoheaders} ${modelheaders})
+    get_filename_component(dir ${header} DIRECTORY)
+    file(RELATIVE_PATH rel_dir ${CMAKE_CURRENT_BINARY_DIR} ${dir})
     install(FILES ${header}
-        DESTINATION ${proio_INCLUDE_DIR}/proio/
-        )
-endforeach()
-foreach(header ${modelheaders})
-    install(FILES ${header}
-        DESTINATION ${proio_INCLUDE_DIR}/proio/model/
+        DESTINATION ${proio_INCLUDE_DIR}/${rel_dir}
         )
 endforeach()
 foreach(header ${libraryheaders})

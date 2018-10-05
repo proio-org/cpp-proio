@@ -2,8 +2,8 @@
 
 #include <assert.h>
 
-#include "eic.pb.h"
 #include "event.h"
+#include "proio/model/eic/eic.pb.h"
 #include "reader.h"
 #include "writer.h"
 

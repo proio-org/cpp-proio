@@ -6,7 +6,7 @@
 #include <google/protobuf/descriptor.h>
 #include <google/protobuf/dynamic_message.h>
 
-#include "proio.pb.h"
+#include <proio/proto/proio.pb.h>
 
 namespace proio {
 /** Class representing a single event
