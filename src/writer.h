@@ -76,10 +76,11 @@ class Writer : public std::mutex {
      * bucket, the bucket is flushed first.
      */
     void PushMetadata(std::string name, const char *data);
-    /** SetCompression sets the compression type to use for future output
-     * buckets.  One of: LZ4, GZIP, or UNCOMPRESSED.
+    /** SetCompression sets the compression algorithm and compression level (-1
+     * for default) to use for future output buckets.  Algorithm is one of:
+     * LZ4, GZIP, or UNCOMPRESSED.
      */
-    void SetCompression(Compression comp = GZIP) { compression = comp; }
+    void SetCompression(Compression alg = GZIP, int level = -1) { compression = alg; complevel = level; }
     /** SetBucketDumpThreshold sets the threshold uncompressed bucket size for
      * automatic compression and output (dump).  I.e., once the size of the
      * uncompressed bucket in memory reaches this threshold, Flush() will be
@@ -92,6 +93,7 @@ class Writer : public std::mutex {
     google::protobuf::io::FileOutputStream *fileStream;
     uint64_t bucketEvents;
     Compression compression;
+    int complevel;
     BucketOutputStream *compBucket;
     uint64_t bucketDumpThres;
     proto::BucketHeader *header;

@@ -56,6 +56,7 @@ void Writer::Flush() {
             std::memset(&prefs, 0, sizeof(prefs));
             prefs.frameInfo = info;
             prefs.compressionLevel = 0;  // LZ4HC_CLEVEL_MAX;
+            if (complevel > 0) prefs.compressionLevel = complevel;
             size_t compBound = LZ4F_compressFrameBound(bucket->ByteCount(), &prefs);
             compBucket->Reset(compBound);
             size_t nWritten = LZ4F_compressFrame(compBucket->Bytes(), compBound, bucket->Bytes(),
@@ -64,7 +65,9 @@ void Writer::Flush() {
             compBucket->SetOffset(nWritten);
         } break;
         case GZIP: {
-            io::GzipOutputStream *gzipStream = new io::GzipOutputStream(compBucket);
+            io::GzipOutputStream::Options options;
+            if (complevel >= 0) options.compression_level = complevel;
+            io::GzipOutputStream *gzipStream = new io::GzipOutputStream(compBucket, options);
             bucket->WriteTo(gzipStream);
             delete gzipStream;
         } break;
