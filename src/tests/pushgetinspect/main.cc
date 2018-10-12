@@ -37,7 +37,7 @@ void pushGetInspect1(proio::Compression comp) {
 
     auto reader = new proio::Reader(filename);
 
-    for (int i = 0; i < eventsOut.size(); i++) {
+    for (size_t i = 0; i < eventsOut.size(); i++) {
         event = reader->Next();
         assert(event);
         assert(event->String().compare(eventsOut[i]->String()) == 0);
@@ -75,7 +75,7 @@ void pushGetInspect2(proio::Compression comp) {
 
     auto reader = new proio::Reader(filename);
 
-    for (int i = 0; i < eventsOut.size(); i++) {
+    for (size_t i = 0; i < eventsOut.size(); i++) {
         event = reader->Next();
         assert(event);
         assert(event->String().compare(eventsOut[i]->String()) == 0);
@@ -117,7 +117,7 @@ void pushGetInspect3(proio::Compression comp) {
 
     auto reader = new proio::Reader(filename);
 
-    for (int i = 0; i < eventsOut.size(); i++) {
+    for (size_t i = 0; i < eventsOut.size(); i++) {
         assert(reader->Next(event));
         assert(event->String().compare(eventsOut[i]->String()) == 0);
         delete eventsOut[i];
@@ -176,7 +176,7 @@ void pushGetInspect4(proio::Compression comp) {
 
     auto reader = new proio::Reader(filename);
 
-    for (int i = 0; i < eventsOut.size(); i++) {
+    for (size_t i = 0; i < eventsOut.size(); i++) {
         assert(reader->Next(event));
         assert(event->String().compare(eventsOut[i]->String()) == 0);
         delete eventsOut[i];
@@ -218,7 +218,7 @@ void pushGetInspect5(proio::Compression comp) {
 
     auto reader = new proio::Reader(filename);
 
-    for (int i = 0; i < eventsOut.size(); i++) {
+    for (size_t i = 0; i < eventsOut.size(); i++) {
         event = reader->Next();
         assert(event);
         event->UseGeneratedPool(false);
@@ -261,7 +261,7 @@ void pushSkipGet1(proio::Compression comp) {
     assert(event);
     assert(event->String().compare(eventsOut[1]->String()) == 0);
     delete event;
-    for (int i = 0; i < eventsOut.size(); i++) delete eventsOut[i];
+    for (size_t i = 0; i < eventsOut.size(); i++) delete eventsOut[i];
 
     delete reader;
     remove(filename);
@@ -298,7 +298,7 @@ void pushSkipGet2(proio::Compression comp) {
     assert(event);
     assert(event->String().compare(eventsOut[1]->String()) == 0);
     delete event;
-    for (int i = 0; i < eventsOut.size(); i++) delete eventsOut[i];
+    for (size_t i = 0; i < eventsOut.size(); i++) delete eventsOut[i];
 
     delete reader;
     remove(filename);
@@ -338,7 +338,7 @@ void pushSkipGet3(proio::Compression comp) {
     assert(reader->Skip(10) == 3);
     reader->SeekToStart();
     assert(reader->Skip(1) == 1);
-    for (int i = 0; i < eventsOut.size(); i++) {
+    for (size_t i = 0; i < eventsOut.size(); i++) {
         assert(reader->Next(event));
         assert(event->String().compare(eventsOut[i]->String()) == 0);
         delete eventsOut[i];

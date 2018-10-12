@@ -131,7 +131,7 @@ void Writer::Push(Event *event) {
 
     bucketEvents++;
 
-    if (bucket->ByteCount() > bucketDumpThres) Flush();
+    if (uint64_t(bucket->ByteCount()) > bucketDumpThres) Flush();
 }
 
 void Writer::PushMetadata(std::string name, const std::string &data) {
@@ -219,11 +219,11 @@ void BucketOutputStream::WriteTo(io::ZeroCopyOutputStream *stream) {
     uint64_t bytesWritten = 0;
     while (stream->Next((void **)&data, &size)) {
         uint64_t bytesLeft = offset - bytesWritten;
-        uint64_t bytesToCopy = (bytesLeft < size) ? bytesLeft : size;
+        uint64_t bytesToCopy = (bytesLeft < uint64_t(size)) ? bytesLeft : size;
         std::memcpy(data, Bytes() + bytesWritten, bytesToCopy);
         bytesLeft -= bytesToCopy;
         bytesWritten += bytesToCopy;
-        if (bytesToCopy < size) stream->BackUp(size - bytesToCopy);
+        if (bytesToCopy < uint64_t(size)) stream->BackUp(size - bytesToCopy);
         if (bytesLeft == 0) break;
     }
 }

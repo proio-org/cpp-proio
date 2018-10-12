@@ -5,8 +5,11 @@ set(CMAKE_CXX_STANDARD 11)
 
 # Options
 if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING "..." FORCE)
+    set(CMAKE_BUILD_TYPE Release CACHE STRING "..." FORCE)
 endif()
+set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+set(CMAKE_CXX_FLAGS_DEBUG "-g")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 option(REPORT_COVERAGE "Enable coverage report" OFF)
 

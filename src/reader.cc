@@ -328,7 +328,7 @@ uint64_t BucketInputStream::Reset(LZ4F_dctx *dctxPtr, BucketInputStream *compBuc
     int srcBytesRemaining = srcSize;
     int dstSize;
     uint8_t *dstBuffer;
-    size_t hint;
+    size_t hint = -1;
     while (srcBytesRemaining > 0) {
         Next((const void **)&dstBuffer, &dstSize);
         size_t srcSizeTmp = srcSize;
