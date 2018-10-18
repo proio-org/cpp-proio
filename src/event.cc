@@ -203,9 +203,17 @@ void Event::Clear() {
 }
 
 void Event::SetDescriptorPool(const DescriptorPool *pool) {
-    FlushCache();
-    descriptorPool = pool;
-    if (pool) messageFactory.reset(new DynamicMessageFactory(pool));
+    if (pool != descriptorPool) {
+        clearDescriptors();
+        descriptorPool = pool;
+    }
+}
+
+void Event::UseGeneratedPool(bool useGenPool) {
+    if (this->useGenPool != useGenPool) {
+        clearDescriptors();
+        this->useGenPool = useGenPool;
+    }
 }
 
 Event &Event::operator=(const Event &event) {
@@ -273,4 +281,12 @@ void Event::tagCleanup() {
         }
     }
     dirtyTags = false;
+}
+void Event::clearDescriptors() {
+    FlushCache();
+    for (auto descVectorPair : store)
+        for (auto entry : descVectorPair.second) delete entry;
+    store.clear();
+    descriptorCache.clear();
+    messageFactory.reset(new DynamicMessageFactory());
 }

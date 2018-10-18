@@ -105,7 +105,7 @@ class Event {
      * SetDescriptorPool.  This is for testing purposes and can also to be used
      * to gain access to new data model fields.
      */
-    void UseGeneratedPool(bool useGenPool = true) { this->useGenPool = useGenPool; }
+    void UseGeneratedPool(bool useGenPool = true);
 
     Event &operator=(const Event &event);
 
@@ -113,6 +113,7 @@ class Event {
     uint64_t getTypeID(google::protobuf::Message *entry);
     const google::protobuf::Descriptor *getDescriptor(uint64_t typeID);
     void tagCleanup();
+    void clearDescriptors();
 
     friend class Writer;
     friend class Reader;

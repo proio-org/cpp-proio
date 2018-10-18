@@ -223,10 +223,20 @@ void pushGetInspect5(proio::Compression comp) {
         assert(event);
         event->UseGeneratedPool(false);
         assert(event->String().compare(eventsOut[i]->String()) == 0);
-        delete eventsOut[i];
         delete event;
     }
 
+    reader->SeekToStart();
+    event = new proio::Event();
+    event->UseGeneratedPool(false);
+
+    for (size_t i = 0; i < eventsOut.size(); i++) {
+        reader->Next(event);
+        assert(event->String().compare(eventsOut[i]->String()) == 0);
+        delete eventsOut[i];
+    }
+
+    delete event;
     delete reader;
     remove(filename);
 }
