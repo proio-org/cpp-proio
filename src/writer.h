@@ -11,8 +11,8 @@
 #include <google/protobuf/descriptor.pb.h>
 #include <google/protobuf/io/zero_copy_stream_impl.h>
 
-#include <proio/proto/proio.pb.h>
 #include "event.h"
+#include "proio/proto/proio.pb.h"
 
 namespace proio {
 typedef proto::BucketHeader_CompType Compression;
@@ -80,7 +80,10 @@ class Writer : public std::mutex {
      * for default) to use for future output buckets.  Algorithm is one of:
      * LZ4, GZIP, or UNCOMPRESSED.
      */
-    void SetCompression(Compression alg = GZIP, int level = -1) { compression = alg; complevel = level; }
+    void SetCompression(Compression alg = GZIP, int level = -1) {
+        compression = alg;
+        complevel = level;
+    }
     /** SetBucketDumpThreshold sets the threshold uncompressed bucket size for
      * automatic compression and output (dump).  I.e., once the size of the
      * uncompressed bucket in memory reaches this threshold, Flush() will be
