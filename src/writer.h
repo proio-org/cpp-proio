@@ -7,9 +7,9 @@
 #include <string>
 #include <thread>
 
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/io/zero_copy_stream_impl.h>
+#include "google/protobuf/descriptor.h"
+#include "google/protobuf/descriptor.pb.h"
+#include "google/protobuf/io/zero_copy_stream_impl.h"
 
 #include "event.h"
 #include "proio/proto/proio.pb.h"

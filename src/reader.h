@@ -5,8 +5,8 @@
 #include <mutex>
 #include <string>
 
-#include <google/protobuf/io/zero_copy_stream_impl.h>
-#include <lz4frame.h>
+#include "google/protobuf/io/zero_copy_stream_impl.h"
+#include "lz4frame.h"
 
 #include "event.h"
 

@@ -3,8 +3,8 @@
 
 #include <string>
 
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/dynamic_message.h>
+#include "google/protobuf/descriptor.h"
+#include "google/protobuf/dynamic_message.h"
 
 #include "proio/proto/proio.pb.h"
 

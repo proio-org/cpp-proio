@@ -1,8 +1,8 @@
 #include <fcntl.h>
 #include <sys/types.h>
 
-#include <google/protobuf/io/gzip_stream.h>
-#include <lz4.h>
+#include "google/protobuf/io/gzip_stream.h"
+#include "lz4.h"
 
 #include "reader.h"
 #include "writer.h"

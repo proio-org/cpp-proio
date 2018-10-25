@@ -1,9 +1,8 @@
 #include <fcntl.h>
 #include <functional>
 
-#include <google/protobuf/io/gzip_stream.h>
-#include <lz4frame.h>
-//#include <lz4hc.h>
+#include "google/protobuf/io/gzip_stream.h"
+#include "lz4frame.h"
 
 #include "writer.h"
 
@@ -55,7 +54,7 @@ void Writer::Flush() {
             LZ4F_preferences_t prefs;
             std::memset(&prefs, 0, sizeof(prefs));
             prefs.frameInfo = info;
-            prefs.compressionLevel = 0;  // LZ4HC_CLEVEL_MAX;
+            prefs.compressionLevel = 0;
             if (complevel > 0) prefs.compressionLevel = complevel;
             size_t compBound = LZ4F_compressFrameBound(bucket->ByteCount(), &prefs);
             compBucket->Reset(compBound);
