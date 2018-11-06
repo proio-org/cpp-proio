@@ -27,10 +27,10 @@ class BucketOutputStream : public google::protobuf::io::ZeroCopyOutputStream {
     BucketOutputStream();
     virtual ~BucketOutputStream();
 
-    bool Next(void **data, int *size);
-    void BackUp(int count);
-    google::protobuf::int64 ByteCount() const;
-    bool AllowsAliasing();
+    bool Next(void **data, int *size) override;
+    void BackUp(int count) override;
+    google::protobuf::int64 ByteCount() const override;
+    bool AllowsAliasing() const override;
 
     uint8_t *Bytes();
     void Reset();

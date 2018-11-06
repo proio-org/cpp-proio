@@ -205,7 +205,7 @@ inline void BucketOutputStream::BackUp(int count) { offset -= count; }
 
 inline int64 BucketOutputStream::ByteCount() const { return offset; }
 
-inline bool BucketOutputStream::AllowsAliasing() { return false; }
+inline bool BucketOutputStream::AllowsAliasing() const { return false; }
 
 uint8_t *BucketOutputStream::Bytes() { return &bytes[0]; }
 

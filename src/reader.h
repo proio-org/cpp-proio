@@ -16,10 +16,10 @@ class BucketInputStream : public google::protobuf::io::ZeroCopyInputStream {
     BucketInputStream(uint64_t size);
     virtual ~BucketInputStream();
 
-    bool Next(const void **data, int *size);
-    void BackUp(int count);
-    bool Skip(int count);
-    google::protobuf::int64 ByteCount() const;
+    bool Next(const void **data, int *size) override;
+    void BackUp(int count) override;
+    bool Skip(int count) override;
+    google::protobuf::int64 ByteCount() const override;
 
     uint8_t *Bytes();
     uint64_t BytesRemaining();
