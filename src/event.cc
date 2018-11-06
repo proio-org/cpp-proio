@@ -218,17 +218,31 @@ void Event::UseGeneratedPool(bool useGenPool) {
 
 Event &Event::operator=(const Event &event) {
     if (&event == this) return *this;
+    Clear();
     *this->eventProto = *event.eventProto;
     this->revTypeLookup = event.revTypeLookup;
+    this->descriptorCache = event.descriptorCache;
     for (auto idEntryPair : event.entryCache) {
         auto entry = idEntryPair.second;
         const Descriptor *desc = getDescriptor(getTypeID(entry));
         if (!desc) throw unknownMessageTypeError;
-        auto newEntry = MessageFactory::generated_factory()->GetPrototype(desc)->New();
+        Message *newEntry;
+        std::vector<Message *> &storeEntries = store[desc];
+        if (storeEntries.size() > 0) {
+            newEntry = storeEntries.back();
+            storeEntries.pop_back();
+        } else {
+            const Message *prototype = NULL;
+            if (useGenPool) prototype = MessageFactory::generated_factory()->GetPrototype(desc);
+            if (!prototype && messageFactory) prototype = messageFactory->GetPrototype(desc);
+            if (prototype)
+                newEntry = prototype->New();
+            else
+                throw unknownMessageTypeError;
+        }
         newEntry->MergeFrom(*entry);
         this->entryCache[idEntryPair.first] = newEntry;
     }
-    this->descriptorCache = event.descriptorCache;
     this->metadata = event.metadata;
     this->dirtyTags = event.dirtyTags;
     return *this;
