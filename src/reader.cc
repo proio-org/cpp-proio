@@ -37,16 +37,15 @@ Reader::~Reader() {
 }
 
 Event *Reader::Next(Event *event, bool metaOnly) {
-    if (event)
-        event->Clear();
-    else
-        event = new Event();
+    if (event) event->Clear();
 
     while (!bucketHeader || bucketIndex >= bucketHeader->nevents()) {
         if (bucketHeader) bucketIndex -= bucketHeader->nevents();
         readHeader();
         if (!bucketHeader) return NULL;
     }
+
+    if (!event) event = new Event();
     event->metadata = metadata;
     if (!metaOnly) {
         if (bucket->BytesRemaining() == 0) readBucket();
