@@ -40,6 +40,7 @@ Writer::~Writer() {
     delete bucket;
     delete fileStream;
     delete compBucket;
+    delete header;
 }
 
 void Writer::Flush() {
