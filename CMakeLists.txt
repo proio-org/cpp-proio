@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
-project(proio VERSION 0.10.3)
+project(proio VERSION 0.10.5)
 
 set(CMAKE_CXX_STANDARD 11)
 
