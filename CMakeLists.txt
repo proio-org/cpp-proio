@@ -130,9 +130,9 @@ foreach(header ${protoheaders})
         )
 endforeach()
 foreach(header ${modelheaders})
-    get_filename_component(header ${header} NAME)
+    file(RELATIVE_PATH header ${CMAKE_CURRENT_BINARY_DIR} ${header})
     set(libproio.pb_ROOTMAP_HEADERS
-        "header proio/model/${header}\n${libproio.pb_ROOTMAP_HEADERS}"
+        "header ${header}\n${libproio.pb_ROOTMAP_HEADERS}"
         )
 endforeach()
 foreach(header ${libraryheaders})
