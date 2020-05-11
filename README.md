@@ -38,8 +38,7 @@ First thing to note is that cpp-proio uses git submodules to pull in the
 language-independent proio files.  This means that you will have to initialize
 and pull the submodule.
 ```shell
-git submodule init
-git submodule update
+git submodule update --init
 ```
 
 Once, the proio submodule is up-to-date, standard CMake practices apply, so
